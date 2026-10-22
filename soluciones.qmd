@@ -1,0 +1,201 @@
+---
+title: "Problemas de Decisión bajo Incertidumbre - Soluciones"
+author: "Tu Nombre Apellidos"
+lang: es
+format:
+  html:
+    embed-resources: true
+  typst:
+    fig-format: png
+---
+
+```{r}
+#| message: false
+source("teoriadecision_funciones_incertidumbre.R")
+```
+
+## Problema 1
+
+### Enunciado
+
+Se considera la siguiente tabla de decisión, con 4 alternativas ($d_1, d_2, d_3, d_4$) y 3 estados de la naturaleza ($e_1, e_2, e_3$):
+
+|       | $e_1$ | $e_2$ | $e_3$ |
+|-------|:-----:|:-----:|:-----:|
+| $d_1$ |  10   |   4   |  -2   |
+| $d_2$ |   6   |   6   |   3   |
+| $d_3$ |  -4   |  12   |   7   |
+| $d_4$ |   8   |  -1   |   9   |
+
+Resuelva el problema con cada uno de los métodos de decisión bajo incertidumbre (Wald, Optimista, Hurwicz con $\alpha = 0.3$, Savage, Laplace y Punto Ideal), tanto en situación favorable (beneficios) como desfavorable (costes), e indique cuáles de las siguientes afirmaciones son verdaderas:
+
+a) Con el criterio de Wald en situación favorable, la alternativa óptima es $d_2$.
+
+b) Con el criterio Optimista en situación favorable, la alternativa óptima es $d_4$.
+
+c) El criterio de Laplace elige la misma alternativa en situación favorable y en situación desfavorable.
+
+d) Con el criterio de Hurwicz ($\alpha = 0.3$) en situación desfavorable, la alternativa óptima es $d_2$.
+
+e) Con el criterio de Savage en situación favorable, el valor óptimo (mínimo de los máximos arrepentimientos) es 6.
+
+### Solución
+
+Introducimos la tabla de decisión en R:
+
+```{r}
+tabla1 = crea.tablaX(c(10, 4, -2,
+                       6, 6, 3,
+                       -4, 12, 7,
+                       8, -1, 9),
+                     numalternativas = 4, numestados = 3)
+tabla1
+```
+
+#### Situación favorable (beneficios)
+
+**Criterio de Wald (pesimista):**
+
+```{r}
+criterio.Wald(tabla1, favorable = TRUE)
+```
+
+**Criterio Optimista:**
+
+```{r}
+criterio.Optimista(tabla1, favorable = TRUE)
+```
+
+**Criterio de Hurwicz ($\alpha = 0.3$):**
+
+```{r}
+criterio.Hurwicz(tabla1, alfa = 0.3, favorable = TRUE)
+```
+
+**Criterio de Savage:**
+
+```{r}
+criterio.Savage(tabla1, favorable = TRUE)
+```
+
+**Criterio de Laplace:**
+
+```{r}
+criterio.Laplace(tabla1, favorable = TRUE)
+```
+
+**Criterio del Punto Ideal:**
+
+```{r}
+criterio.PuntoIdeal(tabla1, favorable = TRUE)
+```
+
+#### Situación desfavorable (costes)
+
+**Criterio de Wald (pesimista):**
+
+```{r}
+criterio.Wald(tabla1, favorable = FALSE)
+```
+
+**Criterio Optimista:**
+
+```{r}
+criterio.Optimista(tabla1, favorable = FALSE)
+```
+
+**Criterio de Hurwicz ($\alpha = 0.3$):**
+
+```{r}
+criterio.Hurwicz(tabla1, alfa = 0.3, favorable = FALSE)
+```
+
+**Criterio de Savage:**
+
+```{r}
+criterio.Savage(tabla1, favorable = FALSE)
+```
+
+**Criterio de Laplace:**
+
+```{r}
+criterio.Laplace(tabla1, favorable = FALSE)
+```
+
+**Criterio del Punto Ideal:**
+
+```{r}
+criterio.PuntoIdeal(tabla1, favorable = FALSE)
+```
+
+### Respuestas del Problema 1
+
+- a) **Verdadera.** Los mínimos por fila son $-2, 3, -4, -1$; el mayor es 3, que corresponde a $d_2$.
+- b) **Falsa.** Los máximos por fila son $10, 6, 12, 9$; el mayor es 12, que corresponde a $d_3$, no a $d_4$.
+- c) **Falsa.** En situación favorable Laplace elige $d_4$ (media 5.33) y en desfavorable elige $d_1$ (media 4).
+- d) **Verdadera.** Los valores de Hurwicz son $6.4, 5.1, 7.2, 6$; el menor es 5.1, que corresponde a $d_2$.
+- e) **Verdadera.** Los máximos arrepentimientos son $11, 6, 14, 13$; el mínimo es 6 ($d_2$).
+
+**RESPUESTAS VERDADERAS DEL PROBLEMA 1: a), d) y e).**
+
+## Problema 2
+
+### Enunciado
+
+Una estudiante de cuarto curso del Grado en Estadística tiene que preparar un examen, pero no sabe si será **teórico**, **práctico** (de problemas) o **mixto**. Está decidiendo qué técnica de estudio utilizar entre las siguientes: estudiar con ayuda de la IA, estudiar escribiendo (esquemas y apuntes a mano), leyendo y subrayando, haciendo ejercicios, o basándose en exámenes de años anteriores.
+
+Según su experiencia, estima el número de **horas de estudio necesarias para aprobar** con cada técnica según el tipo de examen:
+
+|                      | Teórico | Práctico | Mixto |
+|----------------------|:-------:|:--------:|:-----:|
+| Estudiar con la IA   |   20    |    25    |  22   |
+| Escribiendo          |   18    |    35    |  26   |
+| Leyendo y subrayando |   22    |    40    |  30   |
+| Haciendo ejercicios  |   30    |    15    |  20   |
+| Exámenes anteriores  |   27    |    18    |  16   |
+
+Teniendo en cuenta que la estudiante quiere **minimizar** el número de horas de estudio, resuelva el problema con todos los métodos de decisión bajo incertidumbre (con $\alpha = 0.3$ en Hurwicz) e indique cuáles de las siguientes afirmaciones son verdaderas:
+
+a) Según el criterio de Wald, la técnica óptima es estudiar con la IA.
+
+b) Según el criterio Optimista, la técnica óptima es basarse en exámenes anteriores.
+
+c) Según el criterio de Laplace, la técnica óptima necesita de media menos de 21 horas de estudio.
+
+d) La técnica "Leyendo y subrayando" no es óptima según ningún criterio.
+
+e) Según el criterio de Hurwicz ($\alpha = 0.3$), la técnica óptima es basarse en exámenes anteriores.
+
+### Solución
+
+Se trata de una situación **desfavorable** (las horas de estudio son un coste: cuantas menos, mejor).
+
+```{r}
+tabla2 = crea.tablaX(c(20, 25, 22,
+                       18, 35, 26,
+                       22, 40, 30,
+                       30, 15, 20,
+                       27, 18, 16),
+                     numalternativas = 5, numestados = 3,
+                     nb_alternativas = c("IA", "Escribiendo", "Leyendo_subrayando",
+                                         "Ejercicios", "Examenes_anteriores"),
+                     nb_estados = c("Teorico", "Practico", "Mixto"))
+tabla2
+```
+
+Aplicamos todos los criterios a la vez:
+
+```{r}
+resultado2 = criterio.Todos(tabla2, alfa = 0.3, favorable = FALSE)
+knitr::kable(resultado2)
+```
+
+### Respuestas del Problema 2
+
+- a) **Verdadera.** Los máximos de horas por técnica son $25, 35, 40, 30, 27$; el menor es 25, que corresponde a estudiar con la IA.
+- b) **Falsa.** Los mínimos de horas son $20, 18, 22, 15, 16$; el menor es 15, que corresponde a hacer ejercicios.
+- c) **Verdadera.** Laplace elige "Exámenes anteriores", con una media de 20.33 horas, que es menos de 21.
+- d) **Verdadera.** "Leyendo y subrayando" no aparece como óptima en ningún criterio (0 veces óptima).
+- e) **Falsa.** Con Hurwicz ($\alpha = 0.3$) la óptima es estudiar con la IA (23.5 horas), por delante de exámenes anteriores (23.7 horas).
+
+**RESPUESTAS VERDADERAS DEL PROBLEMA 2: a), c) y d).**
