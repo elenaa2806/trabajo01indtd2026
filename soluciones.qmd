@@ -1,6 +1,6 @@
 ---
 title: "Problemas de Decisión bajo Incertidumbre - Soluciones"
-author: "Tu Nombre Apellidos"
+author: "ELena Cascales Toscano"
 lang: es
 format:
   html:
